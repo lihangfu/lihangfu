@@ -9,6 +9,6 @@
       "@/*": ["./src/*"]
     },
 
-    "types": ["vite-svg-loader", "vite/client"]
+    "types": ["vite-svg-loader", "vite/client", "element-plus/global"]
   }
 }
