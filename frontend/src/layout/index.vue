@@ -8,6 +8,7 @@ import NavVertical from './components/lay-sidebar/NavVertical.vue'
     <div>
       <div>主体头部</div>
       <div>主体内容</div>
+      <RouterView />
     </div>
   </div>
 </template>

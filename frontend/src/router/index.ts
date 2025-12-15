@@ -1,44 +1,40 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, type Router } from 'vue-router'
 
-const router = createRouter({
+/** 自动导入全部静态路由，无需再手动引入！匹配 src/router/modules 目录（任何嵌套级别）中具有 .ts 扩展名的所有文件，除了 remaining.ts 文件
+ * 如何匹配所有文件请看：https://github.com/mrmlnc/fast-glob#basic-syntax
+ * 如何排除文件请看：https://cn.vitejs.dev/guide/features.html#negative-patterns
+ */
+const modules: Record<string, any> = import.meta.glob(
+  ['./modules/**/*.ts', '!./modules/**/remaining.ts'],
+  {
+    eager: true,
+  },
+)
+
+/** 原始静态路由（未做任何处理） */
+const routes: any[] = []
+
+Object.keys(modules).forEach((key) => {
+  routes.push(modules[key].default)
+})
+
+/** 创建路由实例 */
+export const router: Router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: () => import('@/views/home/index.vue'),
-    },
-    {
-      path: '/error',
-      redirect: '/error/403',
-      children: [
-        {
-          path: '/error/403',
-          name: '403',
-          component: () => import('@/views/error/403.vue'),
-          meta: {
-            title: '403',
-          },
-        },
-        {
-          path: '/error/404',
-          name: '404',
-          component: () => import('@/views/error/404.vue'),
-          meta: {
-            title: '404',
-          },
-        },
-        {
-          path: '/error/500',
-          name: '500',
-          component: () => import('@/views/error/500.vue'),
-          meta: {
-            title: '500',
-          },
-        },
-      ],
-    },
-  ],
+  routes: routes,
+  strict: true,
+  scrollBehavior(to, from, savedPosition) {
+    return new Promise((resolve) => {
+      if (savedPosition) {
+        return savedPosition
+      } else {
+        if (from.meta.saveSrollTop) {
+          const top: number = document.documentElement.scrollTop || document.body.scrollTop
+          resolve({ left: 0, top })
+        }
+      }
+    })
+  },
 })
 
 export default router
