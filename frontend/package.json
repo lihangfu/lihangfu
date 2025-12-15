@@ -14,6 +14,7 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix --cache",
+    "lint:style": "bunx stylelint --cache --fix \"**/*.{vue,css,scss}\" --cache-location node_modules/.cache/stylelint/",
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
@@ -39,8 +40,13 @@
     "jiti": "^2.6.1",
     "jsdom": "^27.2.0",
     "npm-run-all2": "^8.0.4",
+    "postcss-html": "^1.8.0",
     "prettier": "3.6.2",
     "sass-embedded": "^1.96.0",
+    "stylelint": "^16.26.1",
+    "stylelint-config-recess-order": "^7.4.0",
+    "stylelint-config-recommended-vue": "^1.6.1",
+    "stylelint-config-standard": "^39.0.1",
     "tailwindcss": "^4.1.18",
     "typescript": "~5.9.0",
     "unplugin-auto-import": "^20.3.0",
