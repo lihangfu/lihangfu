@@ -4,6 +4,8 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { MotionPlugin } from '@vueuse/motion'
 
+// 引入重置样式
+import './style/reset.scss'
 import './style/tailwind.css'
 
 const app = createApp(App)
