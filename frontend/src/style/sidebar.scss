@@ -6,7 +6,7 @@
     height: 100vh;
     min-height: 100%;
     margin-left: $sideBarWidth;
-    background: #0066ff;
+    background: #f0f2f5;
   }
 
   .sidebar-container {
@@ -19,8 +19,8 @@
     height: 100%;
     overflow: visible;
     font-size: 0;
-    background: #0dff00 !important;
-    border-right: 1px solid #920505;
+    background: none !important;
+    border-right: 1px solid rgb(5 5 5 / 6%);
   }
 }
 
