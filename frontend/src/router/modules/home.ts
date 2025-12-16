@@ -1,5 +1,3 @@
-import type { RouteRecordRaw } from 'vue-router'
-
 const Layout = () => import('@/layout/index.vue')
 
 export default {
@@ -22,4 +20,4 @@ export default {
       },
     },
   ],
-} satisfies RouteRecordRaw
+} satisfies RouteConfigsTable

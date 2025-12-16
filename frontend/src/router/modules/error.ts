@@ -1,5 +1,3 @@
-import type { RouteRecordRaw } from 'vue-router'
-
 export default {
   path: '/error',
   redirect: '/error/403',
@@ -35,4 +33,4 @@ export default {
       },
     },
   ],
-} satisfies RouteRecordRaw
+} satisfies RouteConfigsTable
