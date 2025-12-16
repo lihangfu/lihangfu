@@ -5,5 +5,8 @@ defineOptions({
 </script>
 
 <template>
-  <div>垂直导航</div>
+  <div :class="['sidebar-container']">
+    <div>logo</div>
+    <el-scrollbar wrap-class="scrollbar-wrapper"><el-menu> test </el-menu></el-scrollbar>
+  </div>
 </template>

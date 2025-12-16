@@ -6,6 +6,8 @@ import { MotionPlugin } from '@vueuse/motion'
 
 // 引入重置样式
 import './style/reset.scss'
+// 导入公共样式
+import './style/index.scss'
 import './style/tailwind.css'
 
 const app = createApp(App)
