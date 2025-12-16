@@ -18,7 +18,7 @@ export default defineConfigWithVueTs(
     files: ['**/*.{ts,mts,tsx,vue}'],
   },
 
-  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
+  globalIgnores(['**/.*', 'dist/*', '*.d.ts', 'public/*', 'src/assets/**', 'src/**/iconfont/**']),
 
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
@@ -35,7 +35,7 @@ export default defineConfigWithVueTs(
     // tseslint.configs.recommended 包含了 TypeScript 项目常用的基础规范（如语法错误检查、类型相关基础约束）
     extends: [...tseslint.configs.recommended],
     // 指定当前配置生效的文件范围（仅对 TypeScript 相关文件生效）
-    files: ['**/*.?([cm])ts', '**/*.?([cm])tsx'],
+    files: ['**/*.?([cm])ts', '**/*.?([cm])tsx', '**/*.vue'],
     // 自定义规则配置（优先级高于继承的推荐规则，可覆盖或新增规则）
     rules: {
       // 禁止变量/函数重复声明（如同一作用域内两次声明 let a = 1）
@@ -165,6 +165,14 @@ export default defineConfigWithVueTs(
           },
           svg: 'always',
           math: 'always',
+        },
+      ],
+      // 禁止未使用的变量/参数
+      '@typescript-eslint/no-unused-vars': [
+        'error', // 强制规范，避免冗余代码
+        {
+          argsIgnorePattern: '^_', // 忽略下划线开头的参数（如 (_param: string) => {}，表示刻意不使用的参数）
+          varsIgnorePattern: '^_', // 忽略下划线开头的变量（如 const _temp = 1;，表示临时变量或占位变量）
         },
       ],
     },
