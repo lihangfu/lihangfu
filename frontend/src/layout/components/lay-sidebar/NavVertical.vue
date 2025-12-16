@@ -2,29 +2,12 @@
 import { computed } from 'vue'
 import LaySidebarItem from '../lay-sidebar/components/SidebarItem.vue'
 import type { menuType } from '@/layout/types'
+import { usePermissionStore } from '@/stores/modules/permission'
 
 // mock 菜单数据，后续替换成真实数据
 const menuData = computed(() => {
-  return [
-    {
-      id: 1,
-      name: 'https://example.com',
-      path: 'https://example.com',
-      noShowingChildren: true,
-      meta: {
-        title: 'External Link',
-      },
-    } as menuType,
-    {
-      id: 2,
-      name: 'Welcome',
-      path: 'Welcome',
-      noShowingChildren: true,
-      meta: {
-        title: 'Welcome',
-      },
-    } as menuType,
-  ]
+  const permissionStore = usePermissionStore()
+  return permissionStore.data.wholeMenus as menuType[]
 })
 </script>
 

@@ -1,7 +1,7 @@
 import App from './App.vue'
 import router from './router'
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { setupStore } from './stores'
 import { MotionPlugin } from '@vueuse/motion'
 
 // 引入重置样式
@@ -12,7 +12,7 @@ import './style/tailwind.css'
 
 const app = createApp(App)
 
-app.use(createPinia())
+setupStore(app)
 app.use(router)
 
 app.use(MotionPlugin)

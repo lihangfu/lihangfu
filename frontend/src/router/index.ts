@@ -1,3 +1,4 @@
+import { usePermissionStoreHook } from '@/stores/modules/permission'
 import { createRouter, createWebHistory, type Router } from 'vue-router'
 
 /** 自动导入全部静态路由，无需再手动引入！匹配 src/router/modules 目录（任何嵌套级别）中具有 .ts 扩展名的所有文件，除了 remaining.ts 文件
@@ -17,6 +18,9 @@ const routes: any[] = []
 Object.keys(modules).forEach((key) => {
   routes.push(modules[key].default)
 })
+
+const permissionStore = usePermissionStoreHook()
+permissionStore.handleWholeMenus(routes)
 
 /** 创建路由实例 */
 export const router: Router = createRouter({
