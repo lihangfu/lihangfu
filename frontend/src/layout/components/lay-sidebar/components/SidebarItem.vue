@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { menuType } from '@/layout/types'
 import SidebarLinkItem from './SidebarLinkItem.vue'
-import { ref, type PropType } from 'vue'
+import { computed, ref, toRaw, type CSSProperties, type PropType } from 'vue'
 import { posix } from 'path-browserify'
+import { useRenderIcon } from '@/components/ReIcon/src/hooks'
 
 const props = defineProps({
   item: {
@@ -16,6 +17,15 @@ const props = defineProps({
     type: String,
     default: '',
   },
+})
+
+const getSubMenuIconStyle = computed((): CSSProperties => {
+  return {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: '0 5px 0 0',
+  }
 })
 
 const onlyOneChild: menuType = ref(null)
@@ -64,6 +74,11 @@ function resolvePath(routePath) {
   >
     <!-- 插槽值 -->
     <el-menu-item>
+      <div v-if="toRaw(item.meta.icon)" class="sub-menu-icon" :style="getSubMenuIconStyle">
+        <component
+          :is="useRenderIcon(toRaw(onlyOneChild.meta.icon) || (item.meta && toRaw(item.meta.icon)))"
+        />
+      </div>
       <el-text truncated class="w-full! px-3! min-w-13.5! text-center! text-inherit!">
         {{ onlyOneChild.meta.title }}
       </el-text>

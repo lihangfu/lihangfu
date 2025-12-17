@@ -16,6 +16,7 @@ export default {
       name: 'Welcome',
       component: () => import('@/views/home/index.vue'),
       meta: {
+        icon: 'ep/home-filled',
         title: '首页',
       },
     },

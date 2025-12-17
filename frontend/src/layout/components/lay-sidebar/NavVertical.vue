@@ -18,7 +18,7 @@ const menuData = computed(() => {
     <div class="text-xl">logo</div>
     <!-- 侧边栏菜单主体，支持滚动条 -->
     <el-scrollbar wrap-class="scrollbar-wrapper">
-      <el-menu>
+      <el-menu unique-opened mode="vertical" :collapse-transition="false">
         <!-- 菜单项 -->
         <LaySidebarItem
           v-for="routes in menuData"

@@ -78,6 +78,8 @@ export default defineConfigWithVueTs(
       // 设为 "off"：TypeScript 可自动推断返回类型，减少冗余代码，不强制声明
       '@typescript-eslint/explicit-module-boundary-types': 'off',
 
+      'vue/multi-word-component-names': 'off', // 要求组件名必须是多单词
+
       // 统一类型导入的语法规范（区分类型导入和值导入）
       '@typescript-eslint/consistent-type-imports': [
         'error', // 设为 error 级别，强制规范

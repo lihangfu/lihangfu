@@ -2,6 +2,8 @@
 import { defineComponent, h } from 'vue'
 import NavVertical from './components/lay-sidebar/NavVertical.vue'
 import LayContent from './components/lay-content/index.vue'
+// 引入 src/components/ReIcon/src/offlineIcon.ts 文件中所有使用addIcon添加过的本地图标
+import '@/components/ReIcon/src/offlineIcon'
 
 const LayHeader = defineComponent({
   name: 'LayHeader',
