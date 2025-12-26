@@ -1,6 +1,6 @@
-.PHONY: build clean ui
+.PHONY: build clean frontend
 
-BIN=wei
+BIN=lihangfu
 DIR_SRC=./
 
 GO_ENV=CGO_ENABLED=0 GO111MODULE=on

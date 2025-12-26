@@ -12,6 +12,7 @@ import Icons from 'unplugin-icons/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/', // Go 后端使用 StaticFS 挂载到根路径，必须使用绝对路径
   plugins: [
     tailwindcss(),
     vue(),

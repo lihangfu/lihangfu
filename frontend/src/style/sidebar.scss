@@ -22,10 +22,24 @@
     background: none !important;
     border-right: 1px solid rgb(5 5 5 / 6%);
   }
+
+  .sub-menu-icon {
+    margin-right: 5px;
+    font-size: 18px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
 }
 
 body {
   $sideBarWidth: 210px;
 
   @include merge-style($sideBarWidth);
+
+  .sub-menu-icon {
+    margin-right: 0;
+  }
 }

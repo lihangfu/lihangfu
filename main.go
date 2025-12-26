@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//go:embed frontend/dist/*
+//go:embed all:frontend/dist
 var buildFS embed.FS
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 
 func SetRouter(router *gin.Engine, buildFS embed.FS) {
 	// 提取 ui/dist 子目录，使路径从根目录开始
-	distFS, err := fs.Sub(buildFS, "ui/dist")
+	distFS, err := fs.Sub(buildFS, "frontend/dist")
 	if err != nil {
 		panic("failed to load embedded dist files: " + err.Error())
 	}
