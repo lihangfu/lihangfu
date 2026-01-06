@@ -1,5 +1,14 @@
 import { usePermissionStoreHook } from '@/stores/modules/permission'
-import { createRouter, createWebHistory, type Router } from 'vue-router'
+import remainingRouter from './modules/remaining'
+import {
+  createRouter,
+  createWebHistory,
+  type RouteComponent,
+  type Router,
+  type RouteRecordRaw,
+} from 'vue-router'
+import { ascending, formatFlatteningRoutes, formatTwoStageRoutes } from './utils'
+import { buildHierarchyTree } from '@/utils/tree'
 
 /** 自动导入全部静态路由，无需再手动引入！匹配 src/router/modules 目录（任何嵌套级别）中具有 .ts 扩展名的所有文件，除了 remaining.ts 文件
  * 如何匹配所有文件请看：https://github.com/mrmlnc/fast-glob#basic-syntax
@@ -19,13 +28,28 @@ Object.keys(modules).forEach((key) => {
   routes.push(modules[key].default)
 })
 
+/** 导出处理后的静态路由（三级及以上的路由全部拍成二级） */
+export const constantRoutes: Array<RouteRecordRaw> = formatTwoStageRoutes(
+  formatFlatteningRoutes(buildHierarchyTree(ascending(routes.flat(Infinity)))),
+)
+
 const permissionStore = usePermissionStoreHook()
 permissionStore.handleWholeMenus(routes)
+
+/** 用于渲染菜单，保持原始层级 */
+export const constantMenus: Array<RouteComponent> = ascending(routes.flat(Infinity)).concat(
+  ...remainingRouter,
+)
+
+/** 不参与菜单的路由 */
+export const remainingPaths = Object.keys(remainingRouter).map((v) => {
+  return remainingRouter[v].path
+})
 
 /** 创建路由实例 */
 export const router: Router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: routes,
+  routes: constantRoutes.concat(...(remainingRouter as any)),
   strict: true,
   scrollBehavior(to, from, savedPosition) {
     return new Promise((resolve) => {

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import type { menuType } from '@/layout/types'
 import SidebarLinkItem from './SidebarLinkItem.vue'
-import { computed, ref, toRaw, type CSSProperties, type PropType } from 'vue'
+import { computed, ref, toRaw, useAttrs, type CSSProperties, type PropType } from 'vue'
 import { posix } from 'path-browserify'
 import { useRenderIcon } from '@/components/ReIcon/src/hooks'
+
+const attrs = useAttrs()
 
 const props = defineProps({
   item: {
@@ -25,6 +27,14 @@ const getSubMenuIconStyle = computed((): CSSProperties => {
     justifyContent: 'center',
     alignItems: 'center',
     margin: '0 5px 0 0',
+  }
+})
+
+const getNoDropdownStyle = computed((): CSSProperties => {
+  return {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
   }
 })
 
@@ -73,13 +83,18 @@ function resolvePath(routePath) {
     :to="item"
   >
     <!-- 插槽值 -->
-    <el-menu-item>
+    <el-menu-item
+      :index="resolvePath(onlyOneChild.path)"
+      :class="{ 'submenu-title-noDropdown': !isNest }"
+      :style="getNoDropdownStyle"
+      v-bind="attrs"
+    >
       <div v-if="toRaw(item.meta.icon)" class="sub-menu-icon" :style="getSubMenuIconStyle">
         <component
           :is="useRenderIcon(toRaw(onlyOneChild.meta.icon) || (item.meta && toRaw(item.meta.icon)))"
         />
       </div>
-      <el-text truncated class="w-full! px-3! min-w-13.5! text-center! text-inherit!">
+      <el-text truncated class="w-full! text-inherit!">
         {{ onlyOneChild.meta.title }}
       </el-text>
     </el-menu-item>
