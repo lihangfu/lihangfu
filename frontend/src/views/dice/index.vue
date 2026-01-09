@@ -1,161 +1,174 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from "vue";
 
 // 骰子数量配置
-const diceCount = ref(2)
-const minDiceCount = 1
-const maxDiceCount = 6
+const diceCount = ref(2);
+const minDiceCount = 1;
+const maxDiceCount = 6;
 
 // 骰子当前点数
-const diceValues = ref<number[]>([1, 1])
+const diceValues = ref<number[]>([1, 1]);
 // 是否正在滚动
-const isRolling = ref(false)
+const isRolling = ref(false);
 // 音效开关
-const soundEnabled = ref(true)
+const soundEnabled = ref(true);
 // 音频上下文
-let audioContext: AudioContext | null = null
+let audioContext: AudioContext | null = null;
 
 // 计算总点数
 const totalPoints = computed(() => {
-  return diceValues.value.reduce((sum, val) => sum + val, 0)
-})
+  return diceValues.value.reduce((sum, val) => sum + val, 0);
+});
 
 // 初始化音频上下文
 onMounted(() => {
   // 延迟创建，避免浏览器自动播放策略限制
-  audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
-})
+  audioContext = new (window.AudioContext ||
+    (window as any).webkitAudioContext)();
+});
 
 // 播放骰子滚动音效
 const playDiceSound = () => {
-  if (!soundEnabled.value || !audioContext) return
+  if (!soundEnabled.value || !audioContext) return;
 
-  const duration = 1.5 // 音效持续时间（秒）
-  const now = audioContext.currentTime
+  const duration = 1.5; // 音效持续时间（秒）
+  const now = audioContext.currentTime;
 
   // 创建多个短促的碰撞声，模拟骰子翻滚
   for (let i = 0; i < 15; i++) {
-    const oscillator = audioContext.createOscillator()
-    const gainNode = audioContext.createGain()
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
 
     // 随机频率模拟骰子碰撞声
-    const baseFrequency = 150 + Math.random() * 200
-    oscillator.frequency.setValueAtTime(baseFrequency, now)
+    const baseFrequency = 150 + Math.random() * 200;
+    oscillator.frequency.setValueAtTime(baseFrequency, now);
 
     // 音量逐渐衰减
-    const startTime = now + (i * duration) / 15
-    const attackTime = 0.01
-    const decayTime = 0.05
+    const startTime = now + (i * duration) / 15;
+    const attackTime = 0.01;
+    const decayTime = 0.05;
 
-    gainNode.gain.setValueAtTime(0, startTime)
-    gainNode.gain.linearRampToValueAtTime(0.15 * (1 - i / 15), startTime + attackTime)
-    gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + decayTime)
+    gainNode.gain.setValueAtTime(0, startTime);
+    gainNode.gain.linearRampToValueAtTime(
+      0.15 * (1 - i / 15),
+      startTime + attackTime
+    );
+    gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + decayTime);
 
-    oscillator.connect(gainNode)
-    gainNode.connect(audioContext.destination)
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
 
-    oscillator.start(startTime)
-    oscillator.stop(startTime + decayTime)
+    oscillator.start(startTime);
+    oscillator.stop(startTime + decayTime);
   }
 
   // 添加低频滚动声
-  const noiseGain = audioContext.createGain()
-  const bufferSize = audioContext.sampleRate * duration
-  const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate)
-  const data = buffer.getChannelData(0)
+  const noiseGain = audioContext.createGain();
+  const bufferSize = audioContext.sampleRate * duration;
+  const buffer = audioContext.createBuffer(
+    1,
+    bufferSize,
+    audioContext.sampleRate
+  );
+  const data = buffer.getChannelData(0);
 
   // 生成白噪音并过滤
   for (let i = 0; i < bufferSize; i++) {
-    data[i] = (Math.random() * 2 - 1) * 0.1 * (1 - i / bufferSize)
+    data[i] = (Math.random() * 2 - 1) * 0.1 * (1 - i / bufferSize);
   }
 
-  const noise = audioContext.createBufferSource()
-  noise.buffer = buffer
+  const noise = audioContext.createBufferSource();
+  noise.buffer = buffer;
 
   // 低通滤波器，模拟摩擦声
-  const filter = audioContext.createBiquadFilter()
-  filter.type = 'lowpass'
-  filter.frequency.setValueAtTime(800, now)
-  filter.frequency.exponentialRampToValueAtTime(200, now + duration)
+  const filter = audioContext.createBiquadFilter();
+  filter.type = "lowpass";
+  filter.frequency.setValueAtTime(800, now);
+  filter.frequency.exponentialRampToValueAtTime(200, now + duration);
 
-  noiseGain.gain.setValueAtTime(0.3, now)
-  noiseGain.gain.exponentialRampToValueAtTime(0.01, now + duration)
+  noiseGain.gain.setValueAtTime(0.3, now);
+  noiseGain.gain.exponentialRampToValueAtTime(0.01, now + duration);
 
-  noise.connect(filter)
-  filter.connect(noiseGain)
-  noiseGain.connect(audioContext.destination)
+  noise.connect(filter);
+  filter.connect(noiseGain);
+  noiseGain.connect(audioContext.destination);
 
-  noise.start(now)
-  noise.stop(now + duration)
-}
+  noise.start(now);
+  noise.stop(now + duration);
+};
 
 // 更新骰子数量
 const updateDiceCount = (count: number) => {
-  if (count < minDiceCount || count > maxDiceCount) return
-  diceCount.value = count
-  diceValues.value = Array(count).fill(1)
-}
+  if (count < minDiceCount || count > maxDiceCount) return;
+  diceCount.value = count;
+  diceValues.value = Array(count).fill(1);
+};
 
 // 生成随机点数
-const getRandomDiceValue = () => Math.floor(Math.random() * 6) + 1
+const getRandomDiceValue = () => Math.floor(Math.random() * 6) + 1;
 
 // 切换音效
 const toggleSound = () => {
-  soundEnabled.value = !soundEnabled.value
-}
+  soundEnabled.value = !soundEnabled.value;
+};
 
 // 滚动骰子
 const rollDice = () => {
-  if (isRolling.value) return
+  if (isRolling.value) return;
 
-  isRolling.value = true
+  isRolling.value = true;
 
   // 播放音效
-  playDiceSound()
+  playDiceSound();
 
   // 动画效果：快速切换随机数字
   const animationInterval = setInterval(() => {
     diceValues.value = Array(diceCount.value)
       .fill(0)
-      .map(() => getRandomDiceValue())
-  }, 100)
+      .map(() => getRandomDiceValue());
+  }, 100);
 
   // 1.5秒后停止并显示最终结果
   setTimeout(() => {
-    clearInterval(animationInterval)
+    clearInterval(animationInterval);
     diceValues.value = Array(diceCount.value)
       .fill(0)
-      .map(() => getRandomDiceValue())
-    isRolling.value = false
-  }, 1500)
-}
+      .map(() => getRandomDiceValue());
+    isRolling.value = false;
+  }, 1500);
+};
 
 // 获取骰子点的位置配置
 const getDiceDots = (value: number) => {
-  const dots: { x: number; y: number }[] = []
+  const dots: { x: number; y: number }[] = [];
 
   switch (value) {
     case 1:
-      dots.push({ x: 50, y: 50 })
-      break
+      dots.push({ x: 50, y: 50 });
+      break;
     case 2:
-      dots.push({ x: 25, y: 25 }, { x: 75, y: 75 })
-      break
+      dots.push({ x: 25, y: 25 }, { x: 75, y: 75 });
+      break;
     case 3:
-      dots.push({ x: 25, y: 25 }, { x: 50, y: 50 }, { x: 75, y: 75 })
-      break
+      dots.push({ x: 25, y: 25 }, { x: 50, y: 50 }, { x: 75, y: 75 });
+      break;
     case 4:
-      dots.push({ x: 25, y: 25 }, { x: 75, y: 25 }, { x: 25, y: 75 }, { x: 75, y: 75 })
-      break
+      dots.push(
+        { x: 25, y: 25 },
+        { x: 75, y: 25 },
+        { x: 25, y: 75 },
+        { x: 75, y: 75 }
+      );
+      break;
     case 5:
       dots.push(
         { x: 25, y: 25 },
         { x: 75, y: 25 },
         { x: 50, y: 50 },
         { x: 25, y: 75 },
-        { x: 75, y: 75 },
-      )
-      break
+        { x: 75, y: 75 }
+      );
+      break;
     case 6:
       dots.push(
         { x: 25, y: 25 },
@@ -163,13 +176,13 @@ const getDiceDots = (value: number) => {
         { x: 25, y: 50 },
         { x: 75, y: 50 },
         { x: 25, y: 75 },
-        { x: 75, y: 75 },
-      )
-      break
+        { x: 75, y: 75 }
+      );
+      break;
   }
 
-  return dots
-}
+  return dots;
+};
 </script>
 
 <template>
@@ -199,7 +212,11 @@ const getDiceDots = (value: number) => {
       </div>
 
       <!-- 音效开关 -->
-      <button class="sound-btn" :class="{ active: soundEnabled }" @click="toggleSound">
+      <button
+        class="sound-btn"
+        :class="{ active: soundEnabled }"
+        @click="toggleSound"
+      >
         <span v-if="soundEnabled">🔊</span>
         <span v-else>🔇</span>
       </button>
@@ -220,7 +237,7 @@ const getDiceDots = (value: number) => {
             class="dot"
             :style="{
               left: `${dot.x}%`,
-              top: `${dot.y}%`,
+              top: `${dot.y}%`
             }"
           />
         </div>
@@ -229,13 +246,17 @@ const getDiceDots = (value: number) => {
 
     <!-- 滚动按钮 -->
     <button :disabled="isRolling" class="roll-btn" @click="rollDice">
-      {{ isRolling ? '投掷中...' : '投掷骰子' }}
+      {{ isRolling ? "投掷中..." : "投掷骰子" }}
     </button>
 
     <!-- 点数显示 -->
     <div class="result-area">
       <div class="individual-results">
-        <div v-for="(value, index) in diceValues" :key="index" class="result-item">
+        <div
+          v-for="(value, index) in diceValues"
+          :key="index"
+          class="result-item"
+        >
           骰子{{ index + 1 }}: <span class="point">{{ value }}</span
           >点
         </div>

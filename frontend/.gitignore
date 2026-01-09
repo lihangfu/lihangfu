@@ -2,8 +2,16 @@ node_modules
 .DS_Store
 dist
 dist-ssr
-coverage
 *.local
+.eslintcache
+report.html
+vite.config.*.timestamp*
+
+yarn.lock
+npm-debug.log*
+.pnpm-error.log*
+.pnpm-debug.log
+tests/**/coverage/
 
 # Editor directories and files
 .idea
@@ -11,18 +19,4 @@ coverage
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
-
-*.tsbuildinfo
-
-.eslintcache
-
-# Cypress
-/cypress/videos/
-/cypress/screenshots/
-
-# Vitest
-__screenshots__/
-
-# env
-bun.lock
+tsconfig.tsbuildinfo

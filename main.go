@@ -7,11 +7,14 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 
+	"github.com/gin-contrib/gzip"
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
-//go:embed all:frontend/dist
+//go:embed frontend/dist/*
 var buildFS embed.FS
 
 func main() {
@@ -19,73 +22,54 @@ func main() {
 	server := gin.New()
 	server.Use(gin.Recovery())
 
-	SetRouter(server, buildFS)
+	SetWebRouter(server, buildFS)
+
 	var port = os.Getenv("PORT")
 	if port == "" {
 		port = strconv.Itoa(16213)
 	}
-	fmt.Printf("server started on http://localhost:%s", port)
+	fmt.Printf("server started on http://localhost:%s\n", port)
 	err := server.Run(":" + port)
 	if err != nil {
 		fmt.Print("failed to start HTTP server: " + err.Error())
 	}
 }
 
-func SetRouter(router *gin.Engine, buildFS embed.FS) {
-	// 提取 ui/dist 子目录，使路径从根目录开始
-	distFS, err := fs.Sub(buildFS, "frontend/dist")
-	if err != nil {
-		panic("failed to load embedded dist files: " + err.Error())
-	}
-
-	// SPA fallback：智能路由处理
+func SetWebRouter(router *gin.Engine, buildFS embed.FS) {
+	indexPageData, _ := buildFS.ReadFile("frontend/dist/index.html")
+	router.Use(gzip.Gzip(gzip.DefaultCompression))
+	router.Use(static.Serve("/", EmbedFolder(buildFS, "frontend/dist")))
 	router.NoRoute(func(c *gin.Context) {
-		path := c.Request.URL.Path
-
-		// 尝试读取请求的文件
-		if path != "/" {
-			// 移除开头的 /
-			filePath := path[1:]
-			if fileData, err := fs.ReadFile(distFS, filePath); err == nil {
-				// 文件存在，根据扩展名设置 Content-Type 并返回
-				contentType := getContentType(filePath)
-				c.Data(http.StatusOK, contentType, fileData)
-				return
-			}
-		}
-
-		// 文件不存在或路径为 /，返回 index.html（SPA fallback）
-		indexHTML, err := fs.ReadFile(distFS, "index.html")
-		if err != nil {
-			c.String(http.StatusInternalServerError, "Failed to load index.html")
+		if strings.HasPrefix(c.Request.RequestURI, "/v1") || strings.HasPrefix(c.Request.RequestURI, "/api") {
+			RelayNotFound(c)
 			return
 		}
-		c.Data(http.StatusOK, "text/html; charset=utf-8", indexHTML)
+		c.Header("Cache-Control", "no-cache")
+		c.Data(http.StatusOK, "text/html; charset=utf-8", indexPageData)
 	})
 }
 
-// 根据文件扩展名返回 Content-Type
-func getContentType(filePath string) string {
-	switch {
-	case len(filePath) >= 3 && filePath[len(filePath)-3:] == ".js":
-		return "application/javascript; charset=utf-8"
-	case len(filePath) >= 4 && filePath[len(filePath)-4:] == ".css":
-		return "text/css; charset=utf-8"
-	case len(filePath) >= 5 && filePath[len(filePath)-5:] == ".json":
-		return "application/json; charset=utf-8"
-	case len(filePath) >= 4 && filePath[len(filePath)-4:] == ".png":
-		return "image/png"
-	case len(filePath) >= 4 && filePath[len(filePath)-4:] == ".jpg", len(filePath) >= 5 && filePath[len(filePath)-5:] == ".jpeg":
-		return "image/jpeg"
-	case len(filePath) >= 4 && filePath[len(filePath)-4:] == ".svg":
-		return "image/svg+xml"
-	case len(filePath) >= 4 && filePath[len(filePath)-4:] == ".ico":
-		return "image/x-icon"
-	case len(filePath) >= 5 && filePath[len(filePath)-5:] == ".woff":
-		return "font/woff"
-	case len(filePath) >= 6 && filePath[len(filePath)-6:] == ".woff2":
-		return "font/woff2"
-	default:
-		return "application/octet-stream"
+type embedFileSystem struct {
+	http.FileSystem
+}
+
+func (e embedFileSystem) Exists(prefix string, path string) bool {
+	_, err := e.Open(path)
+	return err == nil
+}
+
+func EmbedFolder(fsEmbed embed.FS, targetPath string) static.ServeFileSystem {
+	efs, err := fs.Sub(fsEmbed, targetPath)
+	if err != nil {
+		panic(err)
 	}
+	return embedFileSystem{
+		FileSystem: http.FS(efs),
+	}
+}
+
+func RelayNotFound(c *gin.Context) {
+	c.JSON(http.StatusNotFound, gin.H{
+		"error": fmt.Errorf("invalid_request_error"),
+	})
 }

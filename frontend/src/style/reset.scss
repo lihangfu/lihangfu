@@ -1,95 +1,64 @@
-/* =========================
-    应用根节点
-   ========================= */
-
-/* Vue 挂载根节点，占满视口 */
 #app {
   width: 100%;
   height: 100%;
 }
 
-/* =========================
-    html / body 基础设置
-   ========================= */
-
-/* 根元素基础规范 */
 html {
-  box-sizing: border-box; /* 统一盒模型计算方式 */
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
-  line-height: 1.5; /* 全局默认行高 */
-  tab-size: 4; /* tab 键宽度 */
-  text-size-adjust: 100%; /* 防止移动端自动缩放文字 */
+  line-height: 1.5;
+  tab-size: 4;
+  text-size-adjust: 100%;
 }
 
-/* body 基础样式 */
 body {
   width: 100%;
   height: 100%;
-  margin: 0; /* 去掉浏览器默认 margin */
+  margin: 0;
   font-family:
-    'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑',
-    Arial, sans-serif;
-  line-height: inherit; /* 继承 html 的行高 */
-
-  /* 字体抗锯齿（提升显示效果） */
+    "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  line-height: inherit;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-
   text-rendering: optimizelegibility;
 }
 
-/* =========================
-    分割线 / 文本语义标签
-   ========================= */
-
 hr {
-  height: 0; /* 防止出现高度 */
-  color: inherit; /* 继承文本颜色 */
-  border-top-width: 1px; /* 只保留上边框 */
+  height: 0;
+  color: inherit;
+  border-top-width: 1px;
 }
 
-/* 带 title 的缩写，下划线点状 */
 abbr:where([title]) {
   text-decoration: underline dotted;
 }
 
-/* 链接不使用默认蓝色和下划线 */
 a {
   color: inherit;
   text-decoration: inherit;
 }
 
-/* 加粗标签统一加粗权重 */
 b,
 strong {
   font-weight: bolder;
 }
-
-/* =========================
-    代码相关字体
-   ========================= */
 
 code,
 kbd,
 samp,
 pre {
   font-family:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
-    monospace;
-
-  font-size: 1em; /* 不缩放 */
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-size: 1em;
 }
-
-/* =========================
-    小文本 / 上下标
-   ========================= */
 
 small {
   font-size: 80%;
 }
 
-/* 上下标通用样式 */
 sub,
 sup {
   position: relative;
@@ -106,19 +75,11 @@ sup {
   top: -0.5em;
 }
 
-/* =========================
-    表格
-   ========================= */
-
 table {
-  text-indent: 0; /* 防止缩进 */
-  border-collapse: collapse; /* 合并边框 */
+  text-indent: 0;
+  border-collapse: collapse;
   border-color: inherit;
 }
-
-/* =========================
-    表单元素重置
-   ========================= */
 
 button,
 input,
@@ -127,37 +88,28 @@ select,
 textarea {
   padding: 0;
   margin: 0;
-
   font-family: inherit;
   font-size: 100%;
   line-height: inherit;
   color: inherit;
 }
 
-/* 防止按钮自动大写 */
 button,
 select {
   text-transform: none;
 }
 
-/* 移除默认背景 */
 button,
-[type='button'],
-[type='reset'],
-[type='submit'] {
+[type="button"],
+[type="reset"],
+[type="submit"] {
   background-image: none;
 }
 
-/* =========================
-    浏览器兼容性处理
-   ========================= */
-
-/* Firefox 焦点样式 */
 :-moz-focusring {
   outline: auto;
 }
 
-/* Firefox 表单错误样式 */
 :-moz-ui-invalid {
   box-shadow: none;
 }
@@ -166,33 +118,22 @@ progress {
   vertical-align: baseline;
 }
 
-/* 去除 number 输入框箭头 */
 ::-webkit-inner-spin-button,
 ::-webkit-outer-spin-button {
   height: auto;
 }
 
-/* 搜索框内边距 */
-[type='search'] {
+[type="search"] {
   outline-offset: -2px;
 }
 
-/* 文件上传按钮继承字体 */
 ::-webkit-file-upload-button {
   font: inherit;
 }
 
-/* =========================
-    HTML5 语义元素
-   ========================= */
-
 summary {
   display: list-item;
 }
-
-/* =========================
-    标题 / 段落 / 列表重置
-   ========================= */
 
 blockquote,
 dl,
@@ -227,35 +168,24 @@ menu {
   list-style: none;
 }
 
-/* =========================
-    表单补充
-   ========================= */
-
 textarea {
-  resize: vertical; /* 只允许纵向拉伸 */
+  resize: vertical;
 }
 
-/* placeholder 颜色统一 */
 input::placeholder,
 textarea::placeholder {
   color: #9ca3af;
   opacity: 1;
 }
 
-/* 可点击元素光标 */
 button,
-[role='button'] {
+[role="button"] {
   cursor: pointer;
 }
 
-/* 禁用态 */
 :disabled {
   cursor: default;
 }
-
-/* =========================
-    媒体元素
-   ========================= */
 
 svg,
 video,
@@ -273,35 +203,23 @@ video {
   height: auto;
 }
 
-/* =========================
-    工具类 & 辅助
-   ========================= */
-
-/* 隐藏元素 */
 [hidden] {
   display: none;
 }
 
-/* 深色模式提示 */
 .dark {
   color-scheme: dark;
 }
 
-/* label 默认加粗 */
 label {
   font-weight: 700;
 }
 
-/* 全局盒模型继承 */
 *,
 *::before,
 *::after {
   box-sizing: inherit;
 }
-
-/* =========================
-    焦点 / 交互优化
-   ========================= */
 
 a:focus,
 a:active {
@@ -320,11 +238,6 @@ div:focus {
   outline: none;
 }
 
-/* =========================
-    清除浮动（clearfix）
-   ========================= */
-
-/* 使用 SCSS 嵌套写法 */
 .clearfix {
   &::after {
     display: block;
@@ -332,6 +245,6 @@ div:focus {
     clear: both;
     font-size: 0;
     visibility: hidden;
-    content: ' ';
+    content: " ";
   }
 }
