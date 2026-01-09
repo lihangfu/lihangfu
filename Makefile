@@ -27,6 +27,6 @@ clean:
 	@rm -f $(BIN)
 
 frontend:
-	@cd frontend && bun run build && cd -
+	@cd frontend && pnpm build && cd -
 
 all: clean build
