@@ -1,43 +1,50 @@
-<h1>vue-pure-admin精简版（非国际化版本）</h1>
+# lihangfu Frontend
 
-[![license](https://img.shields.io/github/license/pure-admin/vue-pure-admin.svg)](LICENSE)
+lihangfu 个人网站现代化前端应用。
 
-**中文** | [English](./README.en-US.md)
+## 技术栈
 
-## 介绍
+- **框架**: [Next.js 16](https://nextjs.org/)
+- **样式**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **UI 组件**: [Radix UI](https://www.radix-ui.com/)
+- **图标**: [Lucide React](https://lucide.dev/)
+- **包管理器**: [pnpm](https://pnpm.io/)
 
-精简版是基于 [vue-pure-admin](https://github.com/pure-admin/vue-pure-admin) 提炼出的架子，包含主体功能，更适合实际项目开发，打包后的大小在全局引入 [element-plus](https://element-plus.org) 的情况下仍然低于 `2.3MB`，并且会永久同步完整版的代码。开启 `brotli` 压缩和 `cdn` 替换本地库模式后，打包大小低于 `350kb`
+## 快速开始
 
-## 版本选择
+### 前置要求
 
-当前是非国际化版本，如果您需要国际化版本 [请点击](https://github.com/pure-admin/pure-admin-thin/tree/i18n)
+- Node.js (建议使用最新的 LTS 版本)
+- pnpm
 
-## 配套视频
+### 安装
 
-[点我查看 UI 设计](https://www.bilibili.com/video/BV17g411T7rq)  
-[点我查看快速开发教程](https://www.bilibili.com/video/BV1kg411v7QT)
+1. 安装依赖:
 
-## 配套保姆级文档
+   ```bash
+   pnpm install
+   ```
 
-[点我查看 vue-pure-admin 文档](https://pure-admin.cn/)  
-[点我查看 @pureadmin/utils 文档](https://pure-admin-utils.netlify.app)
+2. 运行开发服务器:
 
-## 高级服务
+   ```bash
+   pnpm dev
+   ```
 
-[点我查看详情](https://pure-admin.cn/pages/service/)
+   在浏览器中打开 [http://localhost:3000](http://localhost:3000) (或终端中显示的端口) 查看结果。
 
-## 预览
+## 项目结构
 
-[查看预览](https://pure-admin-thin.netlify.app/#/login)
+- `app/`: Next.js App Router 页面和布局
+- `components/`: 可复用 UI 组件
+  - `ui/`: 基础 UI 组件 (按钮, 输入框等)
+  - `common/`: 共享业务组件
+- `lib/`: 工具函数和服务定义
+- `public/`: 静态资源
 
-## 维护者
+## 脚本
 
-[xiaoxian521](https://github.com/xiaoxian521)
-
-## ⚠️ 注意
-
-精简版不接受任何 `issues` 和 `pr`，如果有问题请到完整版 [issues](https://github.com/pure-admin/vue-pure-admin/issues/new/choose) 去提，谢谢！
-
-## 许可证
-
-[MIT © 2020-present, pure-admin](./LICENSE)
+- `pnpm dev`: 启动开发服务器 (使用 Turbopack)
+- `pnpm build`: 构建生产版本
+- `pnpm start`: 启动生产服务器
+- `pnpm lint`: 运行 ESLint
