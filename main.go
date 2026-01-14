@@ -14,7 +14,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//go:embed frontend/dist/*
+//go:embed all:frontend/dist/*
 var buildFS embed.FS
 
 func main() {
