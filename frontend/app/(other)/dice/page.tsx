@@ -79,7 +79,7 @@ const DicePage: React.FC = () => {
             <Dice5 className="w-6 h-6 text-white" />
           </div>
           <h1 className="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
-            3D 掷骰子大师
+            小曹棋牌室
           </h1>
         </div>
 

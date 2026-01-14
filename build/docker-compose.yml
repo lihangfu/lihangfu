@@ -18,7 +18,7 @@ services:
       dockerfile: ../build/Dockerfile.frontend
     container_name: lihangfu-frontend
     ports:
-      - "3000:3000"
+      - "16214:3000"
     environment:
       - NODE_ENV=production
     depends_on:
