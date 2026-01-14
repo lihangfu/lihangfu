@@ -1,0 +1,32 @@
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: build/Dockerfile.backend
+    container_name: lihangfu-backend
+    ports:
+      - "16213:16213"
+    environment:
+      - PORT=16213
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../build/Dockerfile.frontend
+    container_name: lihangfu-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
