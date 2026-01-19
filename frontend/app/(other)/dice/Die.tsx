@@ -64,7 +64,7 @@ const Die: React.FC<DieProps> = ({ value, isRolling, rotationOffset }) => {
   const renderFace = (faceNumber: number) => (
     <div
       key={faceNumber}
-      className="dice-face"
+      className="absolute inset-0 bg-white rounded-xl shadow-[inset_0_0_15px_rgba(0,0,0,0.15),0_0_2px_rgba(0,0,0,0.2)] border border-slate-200 backface-hidden flex items-center justify-center p-2"
       style={{
         transform: `${FACE_ROTATIONS[faceNumber]} translateZ(var(--dice-half))`,
       }}
@@ -86,10 +86,10 @@ const Die: React.FC<DieProps> = ({ value, isRolling, rotationOffset }) => {
 
   return (
     <div
-      className="perspective-1000 m-4 flex items-center justify-center"
-      style={{ width: "var(--dice-size)", height: "var(--dice-size)" }}
+      className="m-4 flex items-center justify-center"
+      style={{ width: "var(--dice-size)", height: "var(--dice-size)", perspective: "1000px" }}
     >
-      <div className="relative preserve-3d" style={style}>
+      <div className="relative" style={{ ...style, transformStyle: "preserve-3d" }}>
         {[1, 2, 3, 4, 5, 6].map((num) => renderFace(num))}
       </div>
     </div>
