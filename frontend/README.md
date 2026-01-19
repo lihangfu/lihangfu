@@ -6,7 +6,8 @@ lihangfu 个人网站现代化前端应用。
 
 - **框架**: [Next.js 16](https://nextjs.org/)
 - **样式**: [Tailwind CSS 4](https://tailwindcss.com/)
-- **UI 组件**: [Radix UI](https://www.radix-ui.com/)
+- **UI 组件**: [Radix UI](https://www.radix-ui.com/)、[Animate UI](https://animate-ui.com)、[Shadcn UI](https://ui.shadcn.com)
+- **动画**: [motion](https://motion.dev)
 - **图标**: [Lucide React](https://lucide.dev/)
 - **包管理器**: [pnpm](https://pnpm.io/)
 
