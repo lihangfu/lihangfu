@@ -1,17 +1,8 @@
+"use client";
+
 import React from "react";
-import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import {
-  ArrowRight,
-  CreditCard,
-  Globe,
-  Shield,
-  Wallet,
-  Zap,
-} from "lucide-react";
-import { CountingNumber } from "@/components/animate-ui/primitives/texts/counting-number";
+import { BowArrow } from "lucide-react";
 
 export interface HeroSectionProps {
   className?: string;
@@ -23,200 +14,96 @@ export interface HeroSectionProps {
 export const HeroSection = React.memo(function HeroSection({
   className,
 }: HeroSectionProps) {
-  const [balance, setBalance] = React.useState(12450.0);
-  const [income, setIncome] = React.useState(240.0);
+  const [quote, setQuote] = React.useState({
+    hitokoto: "正在加载...",
+    from: "Loading",
+  });
+  const [date] = React.useState(
+    new Date().toLocaleDateString("zh-CN", { month: "long", day: "numeric" }),
+  );
 
+  // 调用一言 API
   React.useEffect(() => {
-    const interval = setInterval(() => {
-      setBalance(Math.random() * (65123.45 - -65) + -65);
-      setIncome(Math.random() * (656.56 - -65.65) + -65.65);
-    }, 6565);
-
-    return () => clearInterval(interval);
+    fetch("https://v1.hitokoto.cn")
+      .then((res) => res.json())
+      .then((data) => setQuote(data))
+      .catch(() =>
+        setQuote({
+          hitokoto: "万物皆有裂痕，那是光照进来的地方。",
+          from: "莱昂纳德·科恩",
+        }),
+      );
   }, []);
 
   return (
     <section className={cn("w-full", className)}>
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{
-          delay: 0.3,
-          duration: 0.8,
-          ease: "easeInOut",
-        }}
-        className="relative z-10 w-full h-screen flex flex-col justify-center px-6"
-      >
-        <div className="container mx-auto max-w-7xl grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <div className="max-w-5xl pt-20 lg:pt-0">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.6,
-                delay: 0.1,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6 text-foreground"
-            >
-              LINUX DO Credit <br />
-              <span className="bg-clip-text text-primary">
-                让积分流通更简单
-              </span>
-            </motion.h1>
+      <div className="min-h-screen text-slate-900 selection:bg-indigo-100 overflow-hidden">
+        {/* header */}
+        <nav className="max-w-7xl mx-auto px-8 py-10 flex justify-between items-center">
+          <div className="flex items-center space-x-3 group cursor-pointer">
+            <BowArrow className="w-6 h-6 text-indigo-500 group-hover:rotate-12 transition-transform" />
+            <span className="text-lg font-semibold tracking-tight">
+              lihangfu
+            </span>
+          </div>
+          <button className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
+            About / 关于
+          </button>
+        </nav>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.6,
-                delay: 0.2,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="text-sm md:text-base text-muted-foreground max-w-xl leading-relaxed mb-10"
-            >
-              专为 LINUX DO 社区打造的积分流通基础设施
-              <br className="hidden md:block" />
-              快速集成、全球覆盖、安全可靠，助您轻松流通积分。
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.6,
-                delay: 0.3,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="flex flex-col sm:flex-row items-center gap-4"
-            >
-              <Link href="/home" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  className="w-full rounded-full bg-primary hover:bg-primary/90 font-medium transition-all active:scale-95"
-                >
-                  立即开始
-                  <ArrowRight className="size-4" />
-                </Button>
-              </Link>
-
-              <Link href="/docs/how-to-use" className="w-full sm:w-auto">
-                <Button
-                  variant="secondary"
-                  size="lg"
-                  className="w-full rounded-full font-medium active:scale-95"
-                >
-                  了解更多
-                </Button>
-              </Link>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="mt-16 flex flex-wrap gap-8 text-sm font-medium text-muted-foreground border-t border-border/50 pt-8"
-            >
-              <div className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-yellow-500" />
-                <span>极速到账</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Globe className="w-5 h-5 text-blue-500" />
-                <span>全球覆盖</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Shield className="w-5 h-5 text-green-500" />
-                <span>安全加密</span>
-              </div>
-            </motion.div>
+        {/* main */}
+        <main className="max-w-7xl mx-auto px-8 pt-12 md:pt-20 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          {/* left */}
+          <div className="space-y-8 animate-in fade-in slide-in-from-left duration-1000">
+            <div className="space-y-2">
+              <h1 className="text-8xl font-bold tracking-tighter text-slate-900 leading-none">
+                lihangfu
+              </h1>
+              <p className="text-2xl font-light text-slate-400 tracking-[0.2em] uppercase">
+                Daily Wisdom / 一言
+              </p>
+            </div>
+            <div className="h-1 w-12 bg-indigo-500 rounded-full"></div>
+            <p className="max-w-md text-slate-500 leading-relaxed italic">
+              {quote.hitokoto}
+            </p>
           </div>
 
-          <div className="hidden lg:block relative h-full min-h-125 w-full">
-            <motion.div
-              initial={{ opacity: 0, x: 50, rotate: -5 }}
-              whileInView={{ opacity: 1, x: 0, rotate: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md aspect-square"
-            >
-              <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/30 rounded-full blur-3xl animate-pulse" />
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/30 rounded-full blur-3xl animate-pulse delay-75" />
+          {/* right */}
+          <div className="relative h-125 flex items-center justify-center">
+            {/* 底层装饰卡片 (浅靛蓝) */}
+            <div className="absolute w-64 h-80 bg-indigo-50/50 rounded-[2.5rem] -rotate-12 -translate-x-25 blur-[1px]"></div>
 
-              <div className="relative z-10 w-full h-64 bg-background/40 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl p-6 flex flex-col justify-between transform transition-transform hover:scale-[1.02] duration-500">
-                <div className="flex gap-4 items-center">
-                  <CreditCard className="size-6" />
-                  <span>LINUX DO Credit</span>
-                </div>
+            {/* 中间层装饰卡片 (浅紫) */}
+            <div className="absolute w-64 h-80 bg-purple-50/50 rounded-[2.5rem] rotate-6 translate-x-10 -translate-y-5 blur-[1px]"></div>
 
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <div className="h-2 w-24 bg-white/10 rounded-full" />
-                    <div className="h-2 w-16 bg-white/10 rounded-full" />
-                  </div>
-                  <div className="flex justify-between items-end">
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">
-                        Total Balance
-                      </p>
-                      <div className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-1">
-                        <span>LDC</span>
-                        <CountingNumber
-                          number={balance}
-                          decimalPlaces={2}
-                          thousandSeparator=","
-                          initiallyStable={true}
-                        />
-                      </div>
-                    </div>
-                    <div className="h-8 w-8 rounded-full bg-primary" />
-                  </div>
-                </div>
+            {/* 主展示卡片 (磨砂玻璃风格) */}
+            <div className="absolute w-72 h-96 bg-white/80 backdrop-blur-xl border border-white/20 rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] z-10 flex flex-col p-8 transition-all duration-500 hover:scale-[1.02] hover:-translate-y-2">
+              <div className="flex justify-between items-start">
+                <span className="text-xs font-bold uppercase tracking-widest text-indigo-500">
+                  Daily
+                </span>
+                <div className="w-2 h-2 rounded-full bg-slate-200"></div>
               </div>
 
-              <motion.div
-                animate={{ y: [0, -20, 0] }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute -top-6 -right-6 z-20 bg-background/60 backdrop-blur-xl border border-white/20 p-4 rounded-2xl shadow-xl"
-              >
-                <div className="flex items-center gap-3">
-                  <div
-                    className={cn(
-                      "w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-500",
-                      income < 0
-                        ? "bg-red-500/20 text-red-500"
-                        : "bg-green-500/20 text-green-500",
-                    )}
-                  >
-                    <Wallet className="size-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Income</p>
-                    <div className="text-sm font-bold flex items-center gap-1">
-                      <span>{income < 0 ? "-" : "+"} LDC</span>
-                      <CountingNumber
-                        number={Math.abs(income)}
-                        decimalPlaces={2}
-                        thousandSeparator=","
-                        initiallyStable={true}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
+              <div className="mt-12 grow">
+                <p className="text-xl font-medium leading-relaxed text-slate-800 line-clamp-6">
+                  {quote.hitokoto}
+                </p>
+              </div>
+
+              <div className="mt-auto pt-6 border-t border-slate-50">
+                <p className="text-sm font-bold text-slate-900">
+                  — {quote.from || "未知"}
+                </p>
+                <p className="text-[10px] text-slate-400 mt-1 uppercase tracking-tighter">
+                  {date}
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      </motion.div>
+        </main>
+      </div>
     </section>
   );
 });
