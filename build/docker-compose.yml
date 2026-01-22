@@ -1,26 +1,24 @@
 services:
   backend:
-    build:
-      context: ..
-      dockerfile: build/Dockerfile.backend
+    image: ghcr.io/lihangfu/backend:latest
     container_name: lihangfu-backend
     ports:
       - "16213:16213"
     environment:
       - PORT=16213
+    command: ["./lihangfu", "api"]
     restart: unless-stopped
     networks:
       - app-network
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: ../build/Dockerfile.frontend
+    image: ghcr.io/lihangfu/frontend:latest
     container_name: lihangfu-frontend
     ports:
       - "16214:3000"
     environment:
       - NODE_ENV=production
+    command: ["pnpm", "start"]
     depends_on:
       - backend
     restart: unless-stopped

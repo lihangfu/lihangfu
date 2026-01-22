@@ -30,3 +30,9 @@ frontend:
 	@cd frontend && pnpm build && cd -
 
 all: clean build
+
+# Docker 镜像构建和推送
+docker-build-push:
+	@./build/build-and-push.sh
+
+.PHONY: all build clean frontend generate universal docker-build-push
