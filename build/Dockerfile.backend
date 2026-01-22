@@ -19,6 +19,9 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o lihangfu .
 # 运行阶段
 FROM alpine:latest
 
+# 添加源代码仓库标签
+LABEL org.opencontainers.image.source="https://github.com/lihangfu/lihangfu"
+
 # 安装 ca-certificates（用于 HTTPS 请求）
 RUN apk --no-cache add ca-certificates
 

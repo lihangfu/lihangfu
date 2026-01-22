@@ -22,6 +22,9 @@ RUN pnpm build
 # 运行阶段
 FROM node:20-alpine
 
+# 添加源代码仓库标签
+LABEL org.opencontainers.image.source="https://github.com/lihangfu/lihangfu"
+
 # 设置工作目录
 WORKDIR /app
 

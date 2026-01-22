@@ -23,10 +23,12 @@ echo ""
 
 # 构建 Backend 镜像
 echo ">>> 构建 Backend 镜像..."
-docker build \
+docker buildx build \
+  --platform linux/amd64 \
   -f build/Dockerfile.backend \
   -t "${BACKEND_IMAGE}:${TAG}" \
   -t "${BACKEND_IMAGE}:${LATEST_TAG}" \
+  --load \
   .
 
 echo ">>> Backend 镜像构建完成: ${BACKEND_IMAGE}:${TAG}"
@@ -34,10 +36,12 @@ echo ""
 
 # 构建 Frontend 镜像
 echo ">>> 构建 Frontend 镜像..."
-docker build \
+docker buildx build \
+  --platform linux/amd64 \
   -f build/Dockerfile.frontend \
   -t "${FRONTEND_IMAGE}:${TAG}" \
   -t "${FRONTEND_IMAGE}:${LATEST_TAG}" \
+  --load \
   ./frontend
 
 echo ">>> Frontend 镜像构建完成: ${FRONTEND_IMAGE}:${TAG}"
